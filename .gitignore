@@ -45,3 +45,14 @@ zig-out/
 *.tar.gz
 *.tgz
 *.zip
+
+# LLM artifacts
+# Ignore Claude-specific local settings
+.claude/settings.local.json
+
+# Ignore temporary or generated files within a .claude directory
+.claude/temp/
+.claude/build/
+
+# Ignore a specific output directory for artifacts
+/artifacts_output/
