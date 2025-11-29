@@ -2,20 +2,20 @@
   "name": "datastar",
   "rules": {
     "source_file": {
-      "type": "REPEAT",
-      "content": {
-        "type": "CHOICE",
-        "members": [
-          {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "datastar_attribute"
+        },
+        {
+          "type": "REPEAT1",
+          "content": {
             "type": "SYMBOL",
             "name": "_statement"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "datastar_attribute"
           }
-        ]
-      }
+        }
+      ]
     },
     "datastar_attribute": {
       "type": "SEQ",
@@ -32,15 +32,54 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "SEQ",
+              "type": "CHOICE",
               "members": [
                 {
-                  "type": "STRING",
-                  "value": ":"
+                  "type": "SEQ",
+                  "members": [
+                    {
+                      "type": "STRING",
+                      "value": "__"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "modifier"
+                    }
+                  ]
                 },
                 {
-                  "type": "SYMBOL",
-                  "name": "modifier"
+                  "type": "SEQ",
+                  "members": [
+                    {
+                      "type": "STRING",
+                      "value": ":"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "plugin_key"
+                    },
+                    {
+                      "type": "CHOICE",
+                      "members": [
+                        {
+                          "type": "SEQ",
+                          "members": [
+                            {
+                              "type": "STRING",
+                              "value": "__"
+                            },
+                            {
+                              "type": "SYMBOL",
+                              "name": "modifier"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "BLANK"
+                        }
+                      ]
+                    }
+                  ]
                 }
               ]
             },
@@ -182,7 +221,7 @@
     },
     "modifier": {
       "type": "PATTERN",
-      "value": "[a-zA-Z0-9_.-]+"
+      "value": "[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)?"
     },
     "_statement": {
       "type": "CHOICE",
@@ -1668,7 +1707,12 @@
   ],
   "conflicts": [],
   "precedences": [],
-  "externals": [],
+  "externals": [
+    {
+      "type": "SYMBOL",
+      "name": "plugin_key"
+    }
+  ],
   "inline": [],
   "supertypes": []
 }

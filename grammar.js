@@ -10,33 +10,38 @@
 module.exports = grammar({
   name: "datastar",
 
-  rules: {
-    source_file: $ => repeat(choice(
-      $._statement,
-      $.datastar_attribute
-    )),
+  externals: $ => [
+    $.plugin_key
+  ],
 
-    // Datastar attribute name parsing (e.g., data-on:click)
+  rules: {
+    source_file: $ => choice(
+      $.datastar_attribute,
+      repeat1($._statement)
+    ),
+
     datastar_attribute: $ => seq(
       "data-",
       $.plugin_name,
-      optional(seq(":", $.modifier))
+      optional(choice(
+        seq("__", $.modifier),
+        seq(":", $.plugin_key, optional(seq("__", $.modifier)))
+      ))
     ),
 
     plugin_name: $ => choice(
       // Standard plugins
-      "attr", "bind", "class", "computed", "effect", "ignore", "ignore-morph", 
-      "indicator", "init", "json-signals", "on", "on-intersect", "on-interval", 
-      "on-signal-patch", "on-signal-patch-filter", "preserve-attr", "ref", 
+      "attr", "bind", "class", "computed", "effect", "ignore", "ignore-morph",
+      "indicator", "init", "json-signals", "on", "on-intersect", "on-interval",
+      "on-signal-patch", "on-signal-patch-filter", "preserve-attr", "ref",
       "show", "signals", "style", "text",
-      // Pro plugins  
-      "animate", "custom-validity", "on-raf", "on-resize", "persist", 
+      // Pro plugins
+      "animate", "custom-validity", "on-raf", "on-resize", "persist",
       "query-string", "replace-url", "rocket", "scroll-into-view", "view-transition"
     ),
 
-    modifier: $ => /[a-zA-Z0-9_.-]+/,
+    modifier: $ => /[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)?/,
 
-    // JavaScript-style statements and expressions
     _statement: $ => choice(
       $.expression_statement,
       $.assignment_statement
@@ -77,7 +82,7 @@ module.exports = grammar({
       $.object
     ),
 
-    // Datastar-specific expressions
+    // Datastar-specific
     signal_reference: $ => seq("$", $._property_chain),
     action_call: $ => seq("@", $.identifier, "(", optional($.arguments), ")"),
 
@@ -91,7 +96,7 @@ module.exports = grammar({
       ))
     )),
 
-    // JavaScript expressions with precedence
+    // Binary operators
     binary_expression: $ => choice(
       ...[
         ['??', 3],
@@ -200,7 +205,6 @@ module.exports = grammar({
 
     parameter_list: $ => prec(1, seq($.identifier, repeat(seq(',', $.identifier)))),
 
-    // Function arguments
     arguments: $ => seq($._expression, repeat(seq(',', $._expression))),
 
     identifier: $ => /[a-zA-Z_][a-zA-Z0-9_]*/

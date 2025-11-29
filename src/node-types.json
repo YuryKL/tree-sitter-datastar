@@ -428,6 +428,10 @@
           "named": true
         },
         {
+          "type": "plugin_key",
+          "named": true
+        },
+        {
           "type": "plugin_name",
           "named": true
         }
@@ -797,7 +801,7 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
           "type": "assignment_statement",
@@ -1069,6 +1073,10 @@
     "named": false
   },
   {
+    "type": "__",
+    "named": false
+  },
+  {
     "type": "`",
     "named": false
   },
@@ -1187,6 +1195,10 @@
   {
     "type": "persist",
     "named": false
+  },
+  {
+    "type": "plugin_key",
+    "named": true
   },
   {
     "type": "preserve-attr",

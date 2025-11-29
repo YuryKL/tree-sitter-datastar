@@ -1,10 +1,12 @@
 # Rust artifacts
 target/
+Cargo.lock
 
 # Node artifacts
 build/
 prebuilds/
 node_modules/
+*.node
 
 # Swift artifacts
 .build/

@@ -15,7 +15,7 @@
   (plugin_name) @tag.builtin)
 
 ; Datastar-specific tokens - MUST come before generic identifier rule
-; Signals: $identifier - capture entire node to ensure uniform color
+; Signals: $identifier - capture entire node 
 (signal_reference) @variable.builtin
 
 ; Actions: @action(...) - highlight @ and action name, but let arguments parse normally

@@ -1,4 +1,4 @@
-module github.com/tree-sitter/tree-sitter-datastar
+module github.com/YuryKL/tree-sitter-datastar
 
 go 1.22
 
