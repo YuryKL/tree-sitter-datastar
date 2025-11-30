@@ -14,21 +14,19 @@
   "data-" @tag.attribute
   (plugin_name) @tag.builtin)
 
-; Datastar-specific tokens - MUST come before generic identifier rule
-; Signals: $identifier - capture entire node 
-(signal_reference) @variable.builtin
+(signal_reference) @variable.builtin.datastar
 
-; Actions: @action(...) - highlight @ and action name, but let arguments parse normally
-; Capture identifier inside action_call specifically to override generic (identifier) below
-(action_call "@" @function.builtin)
-((action_call (identifier) @function.builtin))
+; Action calls - highlight @ and identifier with same color
+(action_name "@" @function.builtin.datastar)
+(action_name (identifier) @function.builtin.datastar)
 
 ; JavaScript operators
-["=" "+=" "-=" "*=" "/=" "%=" "&&=" "||=" "??="] @operator
+["=" "+=" "-=" "*=" "/=" "%=" "**=" "&&=" "||=" "??=" "&=" "|=" "^=" "<<=" ">>=" ">>>="] @operator
 ["&&" "||" "??" "==" "!=" "===" "!==" "<" ">" "<=" ">=" "in" "instanceof"] @operator
 ["+" "-" "*" "/" "%" "**" "<<" ">>" ">>>" "&" "|" "^"] @operator
 ["!" "~" "typeof" "void" "delete" "++" "--"] @operator
 ["?" ":"] @operator
+"..." @operator
 
 ; Member access
 ["." "?." "[" "]" "?.["] @operator
@@ -43,13 +41,10 @@
 ; Keywords
 ["typeof" "void" "delete" "in" "instanceof"] @keyword
 
-; Identifiers - generic catch-all
-; Note: This will also match identifiers in action_call, but action_call captures
-; should take precedence if the editor respects pattern order
 (identifier) @variable
 
 ; Punctuation
-["(" ")" "{" "}" "[" "]" "," ":"] @punctuation.delimiter
+["(" ")" "{" "}" "[" "]" "," ":" ";"] @punctuation.delimiter
 
 ; Property keys in objects
 (property (identifier) @property)

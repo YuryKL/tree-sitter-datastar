@@ -95,7 +95,8 @@ module.exports = grammar({
 
     // Datastar-specific
     signal_reference: $ => seq("$", $._property_chain),
-    action_call: $ => seq("@", $.identifier, "(", optional($.arguments), ")"),
+    action_call: $ => seq($.action_name, "(", optional($.arguments), ")"),
+    action_name: $ => seq("@", $.identifier),
 
     _property_chain: $ => prec.left(seq(
       $.signal_identifier,

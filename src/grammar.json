@@ -468,12 +468,8 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "STRING",
-          "value": "@"
-        },
-        {
           "type": "SYMBOL",
-          "name": "identifier"
+          "name": "action_name"
         },
         {
           "type": "STRING",
@@ -494,6 +490,19 @@
         {
           "type": "STRING",
           "value": ")"
+        }
+      ]
+    },
+    "action_name": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "@"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
         }
       ]
     },
