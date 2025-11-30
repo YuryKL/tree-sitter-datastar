@@ -6,19 +6,19 @@ A [Tree-sitter](https://tree-sitter.github.io) grammar for [Datastar](https://da
 
 This grammar provides comprehensive parsing for:
 
-### 🏷️ Datastar Attribute Names
+### Datastar Attribute Names
 - **Standard plugins**: `data-on:click`, `data-bind:value`, `data-show`, etc.
 - **Pro plugins**: `data-animate`, `data-persist`, `data-view-transition`, etc.
 - **Modifier syntax**: `data-on:click__debounce.500ms`, `data-signals:foo__ifmissing`, `data-on-raf__throttle.10ms`
 - **Full AST structure**: Plugin names, keys, and modifiers are individually parsed for static analysis
 
-### 🧮 JavaScript-Compatible Expressions
+### JavaScript-Compatible Expressions
 - **Signal references**: `$user.name`, `$items[0]`, `$data?.user?.email`
 - **Action calls**: `@get('/api/users')`, `@post('/data', {id: $userId})`
-- **Full JavaScript syntax**: Ternary operators, arrow functions, object/array literals
+- Ternary operators, arrow functions, object/array literals
 - **Complex expressions**: `$visible = $count > 5 ? 'show' : 'hide'`
 
-### 🎨 HTML Template Integration
+### HTML Template Integration
 - **Injection-based parsing**: Works within existing HTML parsers
 - **Template language support**: Compatible with ERB, Jinja2, Handlebars, etc.
 - **Dual injection**: Parses both attribute names and values separately
