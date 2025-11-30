@@ -14,6 +14,10 @@ module.exports = grammar({
     $.plugin_key
   ],
 
+  conflicts: $ => [
+    [$.sequence_expression]
+  ],
+
   rules: {
     source_file: $ => choice(
       $.datastar_attribute,
@@ -44,16 +48,23 @@ module.exports = grammar({
 
     _statement: $ => choice(
       $.expression_statement,
-      $.assignment_statement
+      $.assignment_statement,
+      $.sequence_expression
     ),
 
     expression_statement: $ => $._expression,
 
     assignment_statement: $ => seq(
       $._lhs_expression,
-      choice("=", "+=", "-=", "*=", "/=", "%=", "&&=", "||=", "??="),
+      choice("=", "+=", "-=", "*=", "/=", "%=", "**=", "&&=", "||=", "??=", "&=", "|=", "^=", "<<=", ">>=", ">>>="),
       $._expression
     ),
+
+    // Comma/semicolon operator for sequences (e.g., "a = 1, b = 2" or "a = 1; b = 2")
+    sequence_expression: $ => prec.left(0, seq(
+      $._statement,
+      repeat1(seq(choice(',', ';'), $._statement))
+    )),
 
     _lhs_expression: $ => choice(
       $.signal_reference,
@@ -87,11 +98,11 @@ module.exports = grammar({
     action_call: $ => seq("@", $.identifier, "(", optional($.arguments), ")"),
 
     _property_chain: $ => prec.left(seq(
-      $.identifier,
+      $.signal_identifier,
       repeat(choice(
-        seq(".", $.identifier),
+        seq(".", $.signal_identifier),
         seq("[", $._expression, "]"),
-        seq("?.", $.identifier),
+        seq("?.", $.signal_identifier),
         seq("?.[", $._expression, "]")
       ))
     )),
@@ -175,13 +186,17 @@ module.exports = grammar({
     undefined_literal: $ => "undefined",
 
     // Collections
-    array: $ => seq('[', optional(seq($._expression, repeat(seq(',', $._expression)), optional(','))), ']'),
+    array: $ => seq('[', optional(seq(
+      choice($._expression, $.spread_element),
+      repeat(seq(',', choice($._expression, $.spread_element))),
+      optional(',')
+    )), ']'),
 
     object: $ => seq(
       '{',
       optional(seq(
-        $.property,
-        repeat(seq(',', $.property)),
+        choice($.property, $.spread_element),
+        repeat(seq(',', choice($.property, $.spread_element))),
         optional(',')
       )),
       '}'
@@ -192,6 +207,9 @@ module.exports = grammar({
       ':',
       $._expression
     ),
+
+    // Spread operator (...expr)
+    spread_element: $ => seq('...', $._expression),
 
     // Arrow functions
     arrow_function: $ => prec.right(1, seq(
@@ -205,8 +223,16 @@ module.exports = grammar({
 
     parameter_list: $ => prec(1, seq($.identifier, repeat(seq(',', $.identifier)))),
 
-    arguments: $ => seq($._expression, repeat(seq(',', $._expression))),
+    arguments: $ => seq(
+      choice($._expression, $.spread_element),
+      repeat(seq(',', choice($._expression, $.spread_element)))
+    ),
 
-    identifier: $ => /[a-zA-Z_][a-zA-Z0-9_]*/
+    // Standard JavaScript identifier (used for variables, properties, etc.)
+    identifier: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
+
+    // Datastar-specific identifier that allows hyphens (for signal names like $foo-bar)
+    // This is used only in signal_reference contexts
+    signal_identifier: $ => /[a-zA-Z_][a-zA-Z0-9_-]*/
   }
 });

@@ -59,6 +59,10 @@
           "named": true
         },
         {
+          "type": "spread_element",
+          "named": true
+        },
+        {
           "type": "unary_expression",
           "named": true
         }
@@ -103,6 +107,10 @@
         },
         {
           "type": "primary_expression",
+          "named": true
+        },
+        {
+          "type": "spread_element",
           "named": true
         },
         {
@@ -583,6 +591,10 @@
         {
           "type": "property",
           "named": true
+        },
+        {
+          "type": "spread_element",
+          "named": true
         }
       ]
     }
@@ -745,6 +757,29 @@
     }
   },
   {
+    "type": "sequence_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "assignment_statement",
+          "named": true
+        },
+        {
+          "type": "expression_statement",
+          "named": true
+        },
+        {
+          "type": "sequence_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "signal_reference",
     "named": true,
     "fields": {},
@@ -773,10 +808,6 @@
           "named": true
         },
         {
-          "type": "identifier",
-          "named": true
-        },
-        {
           "type": "member_expression",
           "named": true
         },
@@ -786,6 +817,10 @@
         },
         {
           "type": "primary_expression",
+          "named": true
+        },
+        {
+          "type": "signal_identifier",
           "named": true
         },
         {
@@ -813,6 +848,57 @@
         },
         {
           "type": "expression_statement",
+          "named": true
+        },
+        {
+          "type": "sequence_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "spread_element",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "arrow_function",
+          "named": true
+        },
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "call_expression",
+          "named": true
+        },
+        {
+          "type": "computed_member_expression",
+          "named": true
+        },
+        {
+          "type": "conditional_expression",
+          "named": true
+        },
+        {
+          "type": "member_expression",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "primary_expression",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
           "named": true
         }
       ]
@@ -921,6 +1007,10 @@
     "named": false
   },
   {
+    "type": "&=",
+    "named": false
+  },
+  {
     "type": "'",
     "named": false
   },
@@ -938,6 +1028,10 @@
   },
   {
     "type": "**",
+    "named": false
+  },
+  {
+    "type": "**=",
     "named": false
   },
   {
@@ -977,6 +1071,10 @@
     "named": false
   },
   {
+    "type": "...",
+    "named": false
+  },
+  {
     "type": "/",
     "named": false
   },
@@ -989,11 +1087,19 @@
     "named": false
   },
   {
+    "type": ";",
+    "named": false
+  },
+  {
     "type": "<",
     "named": false
   },
   {
     "type": "<<",
+    "named": false
+  },
+  {
+    "type": "<<=",
     "named": false
   },
   {
@@ -1029,7 +1135,15 @@
     "named": false
   },
   {
+    "type": ">>=",
+    "named": false
+  },
+  {
     "type": ">>>",
+    "named": false
+  },
+  {
+    "type": ">>>=",
     "named": false
   },
   {
@@ -1070,6 +1184,10 @@
   },
   {
     "type": "^",
+    "named": false
+  },
+  {
+    "type": "^=",
     "named": false
   },
   {
@@ -1229,6 +1347,10 @@
     "named": false
   },
   {
+    "type": "signal_identifier",
+    "named": true
+  },
+  {
     "type": "signals",
     "named": false
   },
@@ -1266,6 +1388,10 @@
   },
   {
     "type": "|",
+    "named": false
+  },
+  {
+    "type": "|=",
     "named": false
   },
   {

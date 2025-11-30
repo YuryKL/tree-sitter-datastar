@@ -20,7 +20,7 @@ This grammar provides comprehensive parsing for:
 
 ### HTML Template Integration
 - **Injection-based parsing**: Works within existing HTML parsers
-- **Template language support**: Compatible with ERB, Jinja2, Handlebars, etc.
+- **Template language support**: Currently compatible with Templ, HEEX, and Blade
 - **Dual injection**: Parses both attribute names and values separately
 - **No file associations needed**: Works through Tree-sitter injection queries
 
@@ -134,7 +134,9 @@ Open any HTML file with Datastar and run `:Inspect` with your cursor on a datast
 
 ### Helix
 
-⚠️ **Status**: Experimental - injections may not work reliably. Neovim is recommended.
+✅ **Status**: Working - Syntax highlighting functional, but AST inspection limited compared to Neovim.
+
+**Note**: Helix's inspection tools don't expose injected nodes the same way Neovim's `:Inspect` does. Highlighting works, but tree-sitter scope inspection will show less detail.
 
 #### Quick Install
 
@@ -288,12 +290,14 @@ tree-sitter-datastar/
 5. If seeing query errors: Install query parser with `:TSInstall query`
 6. Try `:write | edit` to reload the file
 
-### Helix: Injections not working
+### Helix: Limited AST inspection
 
-Helix injection support is currently limited. Try:
-1. Check `hx --health datastar` and `hx --health html`
-2. Verify both show `✓` for parser and queries
-3. Note: Attribute name injection may not work in Helix
+**Known difference**: Helix doesn't expose injected tree-sitter nodes in its inspection UI like Neovim's `:Inspect` does. Syntax highlighting will work correctly, but scope inspection tools won't show the full parsed structure.
+
+To verify it's working:
+1. Check `hx --health datastar` shows `✓` for parser and queries
+2. Open an HTML file with Datastar - signals/actions should be highlighted
+3. If highlighting works, the parser is functioning correctly
 
 ### Compilation errors
 

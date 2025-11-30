@@ -9,13 +9,25 @@ NC='\033[0m'
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 EDITOR="${1:-}"
+TEMPLATES="${2:-html}"
 
 show_usage() {
-    echo "Usage: $0 <nvim|helix>"
+    echo "Usage: $0 <nvim|helix> [templates]"
     echo ""
     echo "Install tree-sitter-datastar for your editor:"
     echo "  nvim   - Install for Neovim"
     echo "  helix  - Install for Helix"
+    echo ""
+    echo "Optional template languages (comma-separated):"
+    echo "  html       - HTML (default)"
+    echo "  templ      - Go templates"
+    echo "  heex       - Phoenix/Elixir templates"
+    echo "  blade      - Laravel/PHP templates"
+    echo ""
+    echo "Examples:"
+    echo "  $0 nvim                    # HTML only"
+    echo "  $0 nvim html,templ,heex    # HTML + Templ + HEEx"
+    echo "  $0 nvim blade              # Blade only"
     exit 1
 }
 
@@ -91,25 +103,53 @@ if [ "$EDITOR" = "nvim" ] || [ "$EDITOR" = "neovim" ]; then
     cp "$SCRIPT_DIR/queries/textobjects.scm" "$QUERIES_DIR/"
     echo -e "${GREEN}✓${NC} Query files installed"
 
-    echo "🔗 Setting up HTML injections..."
-    INJECTION_DEST="$HTML_QUERIES_DIR/injections.scm"
+    echo "🔗 Setting up template language injections..."
 
-    if [ -f "$INJECTION_DEST" ] && grep -q "datastar" "$INJECTION_DEST"; then
-        echo -e "${YELLOW}⚠${NC}  HTML injection queries already exist"
-        echo "   File: $INJECTION_DEST"
-        read -p "   Overwrite? (y/N): " -n 1 -r
-        echo
-        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-            echo "   Skipping injection setup"
-            echo -e "${YELLOW}⚠${NC}  Make sure your injections.scm includes datastar!"
-            SKIP_INJECTION=true
+    # Parse template languages
+    IFS=',' read -ra TEMPLATE_ARRAY <<< "$TEMPLATES"
+
+    for template in "${TEMPLATE_ARRAY[@]}"; do
+        template=$(echo "$template" | tr '[:upper:]' '[:lower:]' | xargs)
+
+        case "$template" in
+            html)
+                TEMPLATE_DIR="$HTML_QUERIES_DIR"
+                INJECTION_SRC="injections-nvim.scm"
+                ;;
+            templ)
+                TEMPLATE_DIR="$HOME/.config/nvim/after/queries/templ"
+                INJECTION_SRC="injections-nvim.scm"
+                ;;
+            heex)
+                TEMPLATE_DIR="$HOME/.config/nvim/after/queries/heex"
+                INJECTION_SRC="injections-nvim.scm"
+                ;;
+            blade)
+                TEMPLATE_DIR="$HOME/.config/nvim/after/queries/blade"
+                INJECTION_SRC="injections-nvim.scm"
+                ;;
+            *)
+                echo -e "${YELLOW}⚠${NC}  Unknown template language: $template (skipping)"
+                continue
+                ;;
+        esac
+
+        mkdir -p "$TEMPLATE_DIR"
+        INJECTION_DEST="$TEMPLATE_DIR/injections.scm"
+
+        # Create injection file with appropriate header
+        if [ "$template" = "blade" ]; then
+            echo "; inherits: html" > "$INJECTION_DEST"
+        else
+            echo "; extends" > "$INJECTION_DEST"
         fi
-    fi
+        echo "" >> "$INJECTION_DEST"
 
-    if [ "$SKIP_INJECTION" != "true" ]; then
-        cp "$SCRIPT_DIR/queries/$INJECTION_FILE" "$INJECTION_DEST"
-        echo -e "${GREEN}✓${NC} HTML injection queries configured"
-    fi
+        # Append the injection queries (skip first line if it's a header)
+        tail -n +2 "$SCRIPT_DIR/queries/$INJECTION_SRC" | grep -v "^; extends$" >> "$INJECTION_DEST"
+
+        echo -e "${GREEN}✓${NC} Configured $template injections: $TEMPLATE_DIR/injections.scm"
+    done
 
     echo ""
     echo "✨ Installation complete!"
@@ -117,7 +157,7 @@ if [ "$EDITOR" = "nvim" ] || [ "$EDITOR" = "neovim" ]; then
     echo "📍 Files installed:"
     echo "   Parser:     $PARSER_DIR/datastar.so"
     echo "   Queries:    $QUERIES_DIR/ (highlights, indents, textobjects)"
-    echo "   Injections: $INJECTION_DEST"
+    echo "   Templates:  $(echo ${TEMPLATE_ARRAY[@]} | tr ' ' ', ')"
     echo ""
     echo "🚀 Next steps:"
     echo "   1. Register the parser in your init.vim/init.lua:"
@@ -170,25 +210,28 @@ elif [ "$EDITOR" = "helix" ] || [ "$EDITOR" = "hx" ]; then
     cp "$SCRIPT_DIR/queries/textobjects.scm" "$QUERIES_DIR/"
     echo -e "${GREEN}✓${NC} Query files installed"
 
-    echo "🔗 Setting up HTML injections..."
-    INJECTION_DEST="$HTML_QUERIES_DIR/injections.scm"
+    echo "🔗 Setting up template language injections..."
 
-    if [ -f "$INJECTION_DEST" ] && grep -q "datastar" "$INJECTION_DEST"; then
-        echo -e "${YELLOW}⚠${NC}  HTML injection queries already exist"
-        echo "   File: $INJECTION_DEST"
-        read -p "   Overwrite? (y/N): " -n 1 -r
-        echo
-        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-            echo "   Skipping injection setup"
-            echo -e "${YELLOW}⚠${NC}  Make sure your injections.scm includes datastar!"
-            SKIP_INJECTION=true
-        fi
-    fi
+    # Parse template languages (Helix only supports HTML currently)
+    IFS=',' read -ra TEMPLATE_ARRAY <<< "$TEMPLATES"
 
-    if [ "$SKIP_INJECTION" != "true" ]; then
-        cp "$SCRIPT_DIR/queries/$INJECTION_FILE" "$INJECTION_DEST"
-        echo -e "${GREEN}✓${NC} HTML injection queries configured"
-    fi
+    for template in "${TEMPLATE_ARRAY[@]}"; do
+        template=$(echo "$template" | tr '[:upper:]' '[:lower:]' | xargs)
+
+        case "$template" in
+            html)
+                TEMPLATE_DIR="$HTML_QUERIES_DIR"
+                INJECTION_SRC="injections-helix.scm"
+                ;;
+            *)
+                echo -e "${YELLOW}⚠${NC}  Helix only supports 'html' template (skipping: $template)"
+                continue
+                ;;
+        esac
+
+        cp "$SCRIPT_DIR/queries/$INJECTION_SRC" "$TEMPLATE_DIR/injections.scm"
+        echo -e "${GREEN}✓${NC} Configured $template injections: $TEMPLATE_DIR/injections.scm"
+    done
 
     echo ""
     echo "⚙️  Language configuration required!"
