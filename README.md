@@ -100,17 +100,31 @@ gcc -shared -fPIC -o ~/.local/share/nvim/site/parser/datastar.so \
 ```bash
 mkdir -p ~/.local/share/nvim/site/queries/datastar
 cp queries/highlights.scm ~/.local/share/nvim/site/queries/datastar/
+cp queries/indents.scm ~/.local/share/nvim/site/queries/datastar/
+cp queries/textobjects.scm ~/.local/share/nvim/site/queries/datastar/
 ```
 
 4. **Configure HTML injections:**
-
-Copy the injection queries:
-
 ```bash
+mkdir -p ~/.config/nvim/after/queries/html
 cp queries/injections-nvim.scm ~/.config/nvim/after/queries/html/injections.scm
 ```
 
-5. **Restart Neovim** and open an HTML file with Datastar attributes!
+5. **Register parser** in your nvim config (init.vim or init.lua):
+```lua
+local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
+parser_config.datastar = {
+  install_info = {
+    url = "~/.local/share/tree-sitter-datastar",
+    files = {"src/parser.c", "src/scanner.c"},
+    branch = "main",
+  },
+}
+```
+
+6. **Recommended:** Install query parser for .scm syntax highlighting: `:TSInstall query`
+
+7. **Restart Neovim** and open an HTML file with Datastar attributes!
 
 #### Verification
 
@@ -267,16 +281,12 @@ tree-sitter-datastar/
 
 ### Neovim: No highlighting
 
-1. Verify parser is installed:
-```bash
-ls ~/.local/share/nvim/site/parser/datastar.so
-```
-
+1. Verify parser is installed: `ls ~/.local/share/nvim/site/parser/datastar.so`
 2. Check `:Inspect` output - should show datastar nodes
-
 3. Ensure HTML injection queries are in `~/.config/nvim/after/queries/html/injections.scm`
-
-4. Try `:write | edit` to reload the file
+4. Verify parser is registered in your nvim config (see manual installation step 5)
+5. If seeing query errors: Install query parser with `:TSInstall query`
+6. Try `:write | edit` to reload the file
 
 ### Helix: Injections not working
 
@@ -295,31 +305,10 @@ gcc -shared -fPIC -o parser.so src/parser.c src/scanner.c -I./src
 
 ## Contributing
 
-Contributions are welcome! To contribute:
+Contributions welcome! Please test with real Datastar HTML files and document any breaking changes.
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test with real Datastar HTML files
-5. Submit a pull request
+## License & Credits
 
-Please:
-- Update tests if adding new syntax
-- Document breaking changes
-- Follow existing code style
+MIT License - Created by [Yury Kleyman](https://github.com/YuryKL) for [Datastar](https://data-star.dev) by [@delaneyj](https://github.com/delaneyj)
 
-## License
-
-MIT License - see LICENSE file for details
-
-## Credits
-
-- **Created by**: Yury Kleyman ([@YuryKL](https://github.com/YuryKL))
-- **Datastar framework by**: [@delaneyj](https://github.com/delaneyj)
-- **Built with**: [Tree-sitter](https://tree-sitter.github.io/)
-
-## Links
-
-- [Datastar Documentation](https://data-star.dev)
-- [Tree-sitter Documentation](https://tree-sitter.github.io/tree-sitter/)
-- [Report Issues](https://github.com/YuryKL/tree-sitter-datastar/issues)
+[Report Issues](https://github.com/YuryKL/tree-sitter-datastar/issues)
