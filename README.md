@@ -71,8 +71,13 @@ This grammar provides comprehensive parsing for:
 git clone https://github.com/YuryKL/tree-sitter-datastar.git ~/.local/share/tree-sitter-datastar
 cd ~/.local/share/tree-sitter-datastar
 ./install.sh nvim
-```
 
+```
+You can also specify which injections to install, by default only HTML is installed
+Supported options: html,templ,blade,heex
+```bash
+./install.sh nvim html,templ 
+```
 Then restart Neovim!
 
 #### Manual Installation
