@@ -2,6 +2,9 @@
 
 A [Tree-sitter](https://tree-sitter.github.io) grammar for [Datastar](https://data-star.dev) expressions and attributes.
 
+MIT License, do with it as you please.
+Rocket is not supported yet
+
 ## Features
 
 This grammar provides comprehensive parsing for:
