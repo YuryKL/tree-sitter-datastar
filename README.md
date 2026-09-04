@@ -321,6 +321,6 @@ Contributions welcome! Please test with real Datastar HTML files and document an
 
 ## License & Credits
 
-MIT License - Created by [Yury Kleyman](https://github.com/YuryKL) for [Datastar](https://data-star.dev) by [@delaneyj](https://github.com/delaneyj)
+MIT License - Created by [Yury Kleyman](https://github.com/YuryKL) for [Datastar](https://data-star.dev) from [@starfederation](https://github.com/starfederation)
 
 [Report Issues](https://github.com/YuryKL/tree-sitter-datastar/issues)
