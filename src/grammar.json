@@ -1,4 +1,5 @@
 {
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
   "name": "datastar",
   "rules": {
     "source_file": {
@@ -1346,6 +1347,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "regex_literal"
+        },
+        {
+          "type": "SYMBOL",
           "name": "number_literal"
         },
         {
@@ -1359,6 +1364,27 @@
         {
           "type": "SYMBOL",
           "name": "undefined_literal"
+        }
+      ]
+    },
+    "regex_literal": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "/"
+        },
+        {
+          "type": "PATTERN",
+          "value": "[^/\\\\]*(\\\\.[^/\\\\]*)*"
+        },
+        {
+          "type": "STRING",
+          "value": "/"
+        },
+        {
+          "type": "PATTERN",
+          "value": "[gimsuy]*"
         }
       ]
     },
@@ -1868,5 +1894,6 @@
     }
   ],
   "inline": [],
-  "supertypes": []
+  "supertypes": [],
+  "reserved": {}
 }

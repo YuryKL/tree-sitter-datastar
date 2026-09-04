@@ -23,7 +23,7 @@ This grammar provides comprehensive parsing for:
 
 ### HTML Template Integration
 - **Injection-based parsing**: Works within existing HTML parsers
-- **Template language support**: Currently compatible with Templ, HEEX, and Blade
+- **Template language support**: Currently compatible with Templ, HEEx, Blade, and JSX/TSX
 - **Dual injection**: Parses both attribute names and values separately
 - **No file associations needed**: Works through Tree-sitter injection queries
 
@@ -77,7 +77,7 @@ cd ~/.local/share/tree-sitter-datastar
 
 ```
 You can also specify which injections to install, by default only HTML is installed
-Supported options: html,templ,blade,heex
+Supported options: html,templ,blade,heex,jsx,tsx
 ```bash
 ./install.sh nvim html,templ 
 ```

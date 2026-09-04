@@ -24,29 +24,29 @@ static inline bool is_plugin_key_char(int32_t c) {
 }
 
 bool tree_sitter_datastar_external_scanner_scan(void *payload, TSLexer *lexer, const bool *valid_symbols) {
-  if (!valid_symbols[PLUGIN_KEY]) {
-    return false;
-  }
-
-  if (!is_plugin_key_char(lexer->lookahead)) {
-    return false;
-  }
-
-  while (is_plugin_key_char(lexer->lookahead)) {
-    lexer->advance(lexer, false);
-
-    if (lexer->lookahead == '_') {
-      lexer->mark_end(lexer);
-      lexer->advance(lexer, false);
-      if (lexer->lookahead == '_') {
-        lexer->result_symbol = PLUGIN_KEY;
-        return true;
-      }
+  if (valid_symbols[PLUGIN_KEY]) {
+    if (!is_plugin_key_char(lexer->lookahead)) {
       return false;
     }
+
+    while (is_plugin_key_char(lexer->lookahead)) {
+      lexer->advance(lexer, false);
+
+      if (lexer->lookahead == '_') {
+        lexer->mark_end(lexer);
+        lexer->advance(lexer, false);
+        if (lexer->lookahead == '_') {
+          lexer->result_symbol = PLUGIN_KEY;
+          return true;
+        }
+        return false;
+      }
+    }
+
+    lexer->mark_end(lexer);
+    lexer->result_symbol = PLUGIN_KEY;
+    return true;
   }
 
-  lexer->mark_end(lexer);
-  lexer->result_symbol = PLUGIN_KEY;
-  return true;
+  return false;
 }

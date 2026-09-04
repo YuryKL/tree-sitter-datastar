@@ -162,10 +162,18 @@ module.exports = grammar({
     // Literals
     literal: $ => choice(
       $.string_literal,
+      $.regex_literal,
       $.number_literal,
       $.boolean_literal,
       $.null_literal,
       $.undefined_literal
+    ),
+
+    regex_literal: $ => seq(
+      '/',
+      /[^/\\]*(\\.[^/\\]*)*/,
+      '/',
+      /[gimsuy]*/
     ),
 
     string_literal: $ => choice(

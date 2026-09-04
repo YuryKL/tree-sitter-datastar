@@ -33,6 +33,7 @@
 
 ; Literals
 (string_literal) @string
+(regex_literal) @string.regex
 (number_literal) @number  
 (boolean_literal) @constant.builtin
 (null_literal) @constant.builtin

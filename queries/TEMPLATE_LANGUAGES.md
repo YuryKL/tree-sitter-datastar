@@ -13,6 +13,7 @@ This document lists the injection query configurations for different template la
 | **Templ** | [vrischmann/tree-sitter-templ](https://github.com/vrischmann/tree-sitter-templ) | `; extends` | `~/.config/nvim/after/queries/templ/injections.scm` | Go template language |
 | **HEEx** | [phoenixframework/tree-sitter-heex](https://github.com/phoenixframework/tree-sitter-heex) | `; extends` | `~/.config/nvim/after/queries/heex/injections.scm` | Phoenix/Elixir templates |
 | **Blade** | [EmranMR/tree-sitter-blade](https://github.com/EmranMR/tree-sitter-blade) | `; inherits: html` | `~/.config/nvim/after/queries/blade/injections.scm` | Laravel PHP templates |
+| **JSX/TSX** | Built-in (`jsx`/`tsx` parsers) | `; extends` | `~/.config/nvim/after/queries/{jsx,tsx}/injections.scm` | Uses `injections-nvim-jsx.scm` |
 
 ### ❌ Not Working / Needs Investigation
 
